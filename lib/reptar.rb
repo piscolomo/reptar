@@ -1,11 +1,7 @@
 require "json"
 
 class Reptar
-  def initialize(object)
-    @object = object
-  end
-
-  class << self;
+  class << self
     attr_reader :nodes
 
     def attribute(name)
@@ -17,6 +13,14 @@ class Reptar
       @nodes ||= []
       attributes.each{ |e| @nodes << e }
     end
+
+    def method_missing(method_name, *args)
+      method_name == :collection ? self.send(:attribute, *args) : super
+    end
+  end
+
+  def initialize(object)
+    @object = object
   end
 
   def method_missing(method_name)

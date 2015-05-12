@@ -49,5 +49,15 @@ test "initialize with an array" do
     { name: "Piero" }
   ].to_json
   assert_equal UserReptar.new(users).to_json, result
+end
 
+test "array collection" do
+  UserReptar = Class.new(Reptar) do
+    attribute :name
+    collection :languages
+  end
+
+  user = User.new(name: "Julio", languages: ["Ruby", "Js", "Go"])
+  result = {name: "Julio", languages: ["Ruby", "Js", "Go"]}.to_json
+  assert_equal UserReptar.new(user).to_json, result
 end
