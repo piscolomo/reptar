@@ -20,7 +20,7 @@ Usage
 
 ### Attributes
 
-Inherit `Reptar` to build your representation, initialize your Reptar class with your object and get your json output with `to_json`. Declare the fields you want to return with `attribute`
+Inherit `Reptar to build your representation, initialize your Reptar class with your object and get your json output with `to_json`. Declare the fields you want to return with `attribute`
 
 ```ruby
 class UserRep < Reptar
@@ -160,7 +160,7 @@ class UserRep < Reptar
   attribute :company, with: "CompanyRep"
 end
 
-CompanyRep < Reptar  
+class CompanyRep < Reptar  
   attributes :name, :city
 end
 
@@ -187,7 +187,7 @@ class UserRep < Reptar
   collection :posts, with: "PostRep"
 end
 
-PostRep < Reptar
+class PostRep < Reptar
   attributes :title, :content
 end
 
