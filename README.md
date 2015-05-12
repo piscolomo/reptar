@@ -25,25 +25,26 @@ Usage
 Inherit Reptar to build your representation, initialize your Reptar class with your object and get your json output with `to_json`. Declare the fields you want to return with `attribute`
 
 ```ruby
-UserReptar < Reptar
+UserRep < Reptar
   attribute :name
 end
 
 user = User.new(name: "Julio")
-UserReptar.new(user).to_json
+UserRep.new(user).to_json
 # => "{\"name\":\"Julio\"}"
 ```
 
 You can define multiple attributes with `attributes`
 
 ```ruby
-UserReptar < Reptar
+UserRep < Reptar
   attributes :first_name, :last_name, :email
 end
 
 user = User.new(name: "Julio", last_name: "Piero", email: "julio@example.com")
-UserReptar.new(user).to_json
+UserRep.new(user).to_json
 
+# => The json output is:
 {
   "first_name": "Julio",
   "last_name": "Piero",
@@ -51,3 +52,82 @@ UserReptar.new(user).to_json
 }
 ```
 
+If you want to rename an attribute to send a different name in the json output you can use the `key` option
+
+```ruby
+UserRep < Reptar
+  attribute :name
+  attribute :city, key: :location
+end
+
+user = User.new(name: "Julio", city: "Lima")
+UserRep.new(user).to_json
+
+# => The json output is:
+{
+  "name": "Julio",
+  "location": "Lima"
+}
+```
+
+## Methods
+
+Send your custom methods as attributes to return their results to the json output
+
+```ruby
+PostRep < Reptar
+  attributes :title, :slug
+
+  def slug
+    title.downcase.gsub(' ', '-')
+  end
+end
+
+post = Post.new(title: "My awesome post")
+PostRep.new(post).to_json
+
+# => The json output is:
+{
+  "title": "My awesome post",
+  "slug": "my-awesome-post"
+}
+```
+
+## Set your root
+
+You can specify a root for prepend a keyname to your ouput, use the `root` option for that
+
+```ruby
+UserRep.new(user).to_json(root: :user)
+# => The json output is:
+{ 
+  "user": {
+    "first_name": "Julio",
+    "last_name": "Piero",
+    "email": "julio@example.com"
+  }
+}
+```
+
+## Start with an array
+
+You can initialize your representation class with an array of objects to return the output of each one
+
+```ruby
+UserRep < Reptar
+  attributes :first_name, :last_name
+end
+
+user1 = User.new(name: "Julio")
+user2 = User.new(name: "Abel")
+user3 = User.new(name: "Piero")
+users = [user1, user2, user3]
+UserRep.new(users).to_json
+
+# => The json output is:
+[
+  { name: "Julio" },
+  { name: "Abel" },
+  { name: "Piero" }
+]
+```
