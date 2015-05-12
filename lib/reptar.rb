@@ -8,7 +8,7 @@ class Reptar
   end
 
   def self.attribute(name, options = {})
-    @nodes[name] = options[:with]
+    @nodes[name] = options
   end
 
   def self.attributes(*attributes)
@@ -38,9 +38,11 @@ class Reptar
   end
 
   def build_hash
-    self.class.nodes.each_with_object({}) do |(name, rep), hash|
+    self.class.nodes.each_with_object({}) do |(name, options), hash|
+      rep = options[:with] if options
       res = @object.respond_to?(name) ? @object.send(name) : self.send(name)
       res = Object.const_get(rep).new(res).representable if rep
+      name = options[:key] if options && options[:key]
       hash[name] = res
     end
   end

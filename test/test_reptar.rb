@@ -25,6 +25,16 @@ test "nil attribute" do
   assert_equal UserReptar.new(user).to_json, result
 end
 
+test "changing the key attribute" do
+  PostReptar = Class.new(Reptar) do
+    attribute :slug, key: :url
+  end
+
+  post = Post.new(slug: "this-is-cool")
+  result = {url: "this-is-cool"}.to_json
+  assert_equal PostReptar.new(post).to_json, result
+end
+
 test "multiple attributes" do
   UserReptar = Class.new(Reptar) do
     attributes :name, :email
