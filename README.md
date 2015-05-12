@@ -3,10 +3,6 @@ Reptar
 
 Microlibrary for write representations of objects to your JSON APIs.
 
-## Introduction
-
-
-
 ## Installation
 
 Installing Reptar is as simple as running:
@@ -52,7 +48,7 @@ UserRep.new(user).to_json
 }
 ```
 
-If you want to rename an attribute to send a different name in the json output you can use the `key` option
+If you want to rename an attribute to send a different name in the json output you can use the `key` option.
 
 ```ruby
 UserRep < Reptar
@@ -72,7 +68,7 @@ UserRep.new(user).to_json
 
 ## Methods
 
-Send your custom methods as attributes to return their results to the json output
+Send your custom methods as attributes to return their results to the json output.
 
 ```ruby
 PostRep < Reptar
@@ -95,7 +91,7 @@ PostRep.new(post).to_json
 
 ## Set your root
 
-You can specify a root for prepend a keyname to your ouput, use the `root` option for that
+You can specify a root for prepend a keyname to your ouput, use the `root` option for that-
 
 ```ruby
 UserRep.new(user).to_json(root: :user)
@@ -111,11 +107,11 @@ UserRep.new(user).to_json(root: :user)
 
 ## Start with an array
 
-You can initialize your representation class with an array of objects to return the output of each one
+You can initialize your representation class with an array of objects to return the output of each one.
 
 ```ruby
 UserRep < Reptar
-  attributes :first_name, :last_name
+  attributes :name
 end
 
 user1 = User.new(name: "Julio")
@@ -130,4 +126,92 @@ UserRep.new(users).to_json
   { name: "Abel" },
   { name: "Piero" }
 ]
+```
+
+## Collections
+
+`collection` method is available to be more explicit in your representation.
+
+```ruby
+UserRep < Reptar
+  attribute :name
+  collection :languages
+end
+
+user = User.new(name: "Julio", languages: ["Ruby", "Js", "Go"])
+UserRep.new(user).to_json
+
+# => The json output is:
+{
+  name: "Julio", 
+  languages: ["Ruby", "Js", "Go"]
+}
+```
+
+## Associations
+
+You can associate your representation class with another using the `with` option, this is useful for return a nested output.
+
+```ruby
+UserRep < Reptar
+  attributes :name, :email
+  attribute :company, with: "CompanyRep"
+end
+
+CompanyRep < Reptar  
+  attributes :name, :city
+end
+
+user = User.new(name: "Julio", email: "julio@example.com")
+user.company = Company.new(name: "Codalot", city: "Lima")
+UserRep.new(user).to_json
+
+# => The json output is:
+{
+  name: "Julio",
+  email: "julio@example.com",
+  company: {
+    name: "Codalot",
+    city: "Lima"
+  }
+}
+```
+
+You are free to also use ´collection´ to define your asocciations
+
+```ruby
+UserRep < Reptar
+  attribute :name, :email
+  collection :posts, with: "PostRep"
+end
+
+PostRep < Reptar
+  attribute :title, :content
+end
+
+user = User.new(name: "Julio", email: "julio@example.com")
+user.posts << Post.new(title: "Awesome title 1", content: "lorem lipsum")
+user.posts << Post.new(title: "Awesome title 2", content: "lorem lipsum")
+user.posts << Post.new(title: "Awesome title 3", content: "lorem lipsum")
+UserRep.new(user).to_json
+
+# => The json output is:
+{
+  name: "Julio",
+  email: "julio@example.com",
+  posts: [
+    {
+      title: "Awesome title 1",
+      content: "lorem lipsum"
+    },
+    {
+      title: "Awesome title 2",
+      content: "lorem lipsum"
+    },
+    {
+      title: "Awesome title 3",
+      content: "lorem lipsum"
+    }
+  ]
+}
 ```
