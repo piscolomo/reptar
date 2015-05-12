@@ -16,9 +16,9 @@ Include Reptar in your Gemfile with gem 'reptar' or require it with require 'rep
 Usage
 -----
 
-## Attributes
+### Attributes
 
-Inherit Reptar to build your representation, initialize your Reptar class with your object and get your json output with `to_json`. Declare the fields you want to return with `attribute`
+Inherit `Reptar to build your representation, initialize your Reptar class with your object and get your json output with `to_json`. Declare the fields you want to return with `attribute`
 
 ```ruby
 UserRep < Reptar
@@ -37,7 +37,7 @@ UserRep < Reptar
   attributes :first_name, :last_name, :email
 end
 
-user = User.new(name: "Julio", last_name: "Piero", email: "julio@example.com")
+user = User.new(first_name: "Julio", last_name: "Piero", email: "julio@example.com")
 UserRep.new(user).to_json
 
 # => The json output is:
@@ -66,7 +66,7 @@ UserRep.new(user).to_json
 }
 ```
 
-## Methods
+### Methods
 
 Send your custom methods as attributes to return their results to the json output.
 
@@ -89,9 +89,9 @@ PostRep.new(post).to_json
 }
 ```
 
-## Set your root
+### Set your root
 
-You can specify a root for prepend a keyname to your ouput, use the `root` option for that-
+You can specify a root for prepend a keyname to your ouput, use the `root` option for that.
 
 ```ruby
 UserRep.new(user).to_json(root: :user)
@@ -105,7 +105,7 @@ UserRep.new(user).to_json(root: :user)
 }
 ```
 
-## Start with an array
+### Start with an array
 
 You can initialize your representation class with an array of objects to return the output of each one.
 
@@ -128,7 +128,7 @@ UserRep.new(users).to_json
 ]
 ```
 
-## Collections
+### Collections
 
 `collection` method is available to be more explicit in your representation.
 
@@ -148,7 +148,7 @@ UserRep.new(user).to_json
 }
 ```
 
-## Associations
+### Associations
 
 You can associate your representation class with another using the `with` option, this is useful for return a nested output.
 
@@ -177,16 +177,16 @@ UserRep.new(user).to_json
 }
 ```
 
-You are free to also use ´collection´ to define your asocciations
+You are free to also use `collection for define your asocciations.
 
 ```ruby
 UserRep < Reptar
-  attribute :name, :email
+  attributes :name, :email
   collection :posts, with: "PostRep"
 end
 
 PostRep < Reptar
-  attribute :title, :content
+  attributes :title, :content
 end
 
 user = User.new(name: "Julio", email: "julio@example.com")
