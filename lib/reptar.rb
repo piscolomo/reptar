@@ -1,22 +1,22 @@
 require "json"
 
 class Reptar
-  class << self
-    attr_reader :nodes
+  class << self; attr_reader :nodes; end
 
-    def attribute(name, options = {})
-      @nodes ||= {}
-      @nodes[name] = options.fetch(:with, nil)
-    end
+  def self.inherited(klass)
+    klass.instance_variable_set("@nodes", {})
+  end
 
-    def attributes(*attributes)
-      @nodes ||= {}
-      attributes.each{ |e| @nodes[e] = nil }
-    end
+  def self.attribute(name, options = {})
+    @nodes[name] = options[:with]
+  end
 
-    def method_missing(method_name, *args)
-      method_name == :collection ? self.send(:attribute, *args) : super
-    end
+  def self.attributes(*attributes)
+    attributes.each{ |e| @nodes[e] = nil }
+  end
+
+  def self.method_missing(method_name, *args)
+    method_name == :collection ? self.send(:attribute, *args) : super
   end
 
   def initialize(object)
@@ -28,7 +28,7 @@ class Reptar
   end
 
   def to_json(options = {})
-    root = options.fetch(:root, nil)
+    root = options[:root]
     (root ? { root => representable } : representable).to_json
   end
 
