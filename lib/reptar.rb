@@ -27,15 +27,18 @@ class Reptar
     @object.respond_to?(method_name) ? @object.send(method_name) : super
   end
 
-  def to_json
+  def to_json; representable.to_json; end
+
+  def representable
     return nil unless @object
-    h = @object.is_a?(Array) ? @object.map{|e| self.class.new(e).hasheable } : hasheable
-    h.to_json
+    @object.is_a?(Array) ? @object.map{|e| self.class.new(e).build_hash } : build_hash
   end
 
-  def hasheable
-    self.class.nodes.each_with_object({}) do |(name, representable), hash|
-      hash[name] = @object.respond_to?(name) ? @object.send(name) : self.send(name)
+  def build_hash
+    self.class.nodes.each_with_object({}) do |(name, rep), hash|
+      res = @object.respond_to?(name) ? @object.send(name) : self.send(name)
+      res = Object.const_get(rep).new(res).representable if rep
+      hash[name] = res
     end
   end
 end

@@ -70,24 +70,24 @@ test "array collection" do
   assert_equal UserReptar.new(user).to_json, result
 end
 
-# test "a single representable association" do
-#   UserReptar = Class.new(Reptar) do
-#     attribute :name
-#     attribute :company, with: "CompanyReptar"
-#   end
+test "a single representable association" do
+  UserReptar = Class.new(Reptar) do
+    attribute :name
+    attribute :company, with: "CompanyReptar"
+  end
 
-#   OrgReptar = Class.new(Reptar) do
-#     attribute :name
-#   end
-#   user = User.new(name: "Julio")
-#   user.company = Company.new(name: "Things that matters")
+  CompanyReptar = Class.new(Reptar) do
+    attribute :name
+  end
+  user = User.new(name: "Julio")
+  user.company = Company.new(name: "Codalot")
 
-#   result = {
-#     name: "Julio",
-#     company: {
-#       name: "Codalot"
-#     }
-#   }.to_json
+  result = {
+    name: "Julio",
+    company: {
+      name: "Codalot"
+    }
+  }.to_json
 
-#   assert_equal result, UserReptar.new(user).to_json
-# end
+  assert_equal UserReptar.new(user).to_json, result
+end
