@@ -6,11 +6,16 @@ class Reptar
   end
 
   class << self;
-    attr_reader :attributes
+    attr_reader :nodes
 
     def attribute(name)
-      @attributes ||= []
-      @attributes << name
+      @nodes ||= []
+      @nodes << name
+    end
+
+    def attributes(*attributes)
+      @nodes ||= []
+      attributes.each{ |e| @nodes << e }
     end
   end
 
@@ -20,7 +25,7 @@ class Reptar
 
   def to_json
     return nil unless @object
-    self.class.attributes.each_with_object({}) do |name, hash|
+    self.class.nodes.each_with_object({}) do |name, hash|
       hash[name] = @object.respond_to?(name) ? @object.send(name) : self.send(name)
     end.to_json
   end
