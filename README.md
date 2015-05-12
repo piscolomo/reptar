@@ -43,9 +43,7 @@ end
 
 user = User.new(name: "Julio", last_name: "Piero", email: "julio@example.com")
 UserReptar.new(user).to_json
-```
 
-```json
 {
   "first_name": "Julio",
   "last_name": "Piero",
