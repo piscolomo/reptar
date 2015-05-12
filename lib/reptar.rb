@@ -4,14 +4,14 @@ class Reptar
   class << self
     attr_reader :nodes
 
-    def attribute(name)
-      @nodes ||= []
-      @nodes << name
+    def attribute(name, options = {})
+      @nodes ||= {}
+      @nodes[name] = options.fetch(:with, nil)
     end
 
     def attributes(*attributes)
-      @nodes ||= []
-      attributes.each{ |e| @nodes << e }
+      @nodes ||= {}
+      attributes.each{ |e| @nodes[e] = nil }
     end
 
     def method_missing(method_name, *args)
@@ -34,7 +34,7 @@ class Reptar
   end
 
   def hasheable
-    self.class.nodes.each_with_object({}) do |name, hash|
+    self.class.nodes.each_with_object({}) do |(name, representable), hash|
       hash[name] = @object.respond_to?(name) ? @object.send(name) : self.send(name)
     end
   end

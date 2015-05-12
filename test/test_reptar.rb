@@ -3,6 +3,7 @@ require "ostruct"
 
 User = OpenStruct
 Post = OpenStruct
+Company = OpenStruct
 
 test "single attribute to json" do
   UserReptar = Class.new(Reptar) do
@@ -44,10 +45,12 @@ test "initialize with an array" do
   end
 
   users = [User.new(name: "Julio"), User.new(name: "Piero")]
+  
   result = [
     { name: "Julio" },
     { name: "Piero" }
   ].to_json
+
   assert_equal UserReptar.new(users).to_json, result
 end
 
@@ -58,6 +61,33 @@ test "array collection" do
   end
 
   user = User.new(name: "Julio", languages: ["Ruby", "Js", "Go"])
-  result = {name: "Julio", languages: ["Ruby", "Js", "Go"]}.to_json
+  
+  result = {
+    name: "Julio", 
+    languages: ["Ruby", "Js", "Go"]
+  }.to_json
+
   assert_equal UserReptar.new(user).to_json, result
 end
+
+# test "a single representable association" do
+#   UserReptar = Class.new(Reptar) do
+#     attribute :name
+#     attribute :company, with: "CompanyReptar"
+#   end
+
+#   OrgReptar = Class.new(Reptar) do
+#     attribute :name
+#   end
+#   user = User.new(name: "Julio")
+#   user.company = Company.new(name: "Things that matters")
+
+#   result = {
+#     name: "Julio",
+#     company: {
+#       name: "Codalot"
+#     }
+#   }.to_json
+
+#   assert_equal result, UserReptar.new(user).to_json
+# end
