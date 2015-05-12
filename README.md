@@ -3,6 +3,8 @@ Reptar
 
 Microlibrary for write representations of objects to your JSON APIs.
 
+![Reptar](http://vignette3.wikia.nocookie.net/godzilla/images/4/4c/Reptar.png)
+
 ## Installation
 
 Installing Reptar is as simple as running:
