@@ -49,7 +49,7 @@ test "method as attribute" do
   assert_equal PostReptar.new(post).to_json, result
 end
 
-test "aplying root" do
+test "aplying root to single element" do
   UserReptar = Class.new(Reptar) do
     attribute :name
   end
@@ -57,6 +57,21 @@ test "aplying root" do
   user = User.new(name: "Julio")
   result = {user: {name: "Julio"}}.to_json
   assert_equal UserReptar.new(user).to_json(root: :user), result
+end
+
+test "aplying root to a multiple elements" do
+  UserReptar = Class.new(Reptar) do
+    attribute :name
+  end
+
+  users = [User.new(name: "Julio"), User.new(name: "Piero")]
+  result = {
+    users: [
+      { name: "Julio" },
+      { name: "Piero" }
+    ]
+  }.to_json
+  assert_equal UserReptar.new(users).to_json(root: :users), result
 end
 
 test "initialize with an array" do
