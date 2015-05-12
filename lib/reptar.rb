@@ -20,10 +20,8 @@ class Reptar
 
   def to_json
     return nil unless @object
-    hash = {}
-    self.class.attributes.each do |name|
+    self.class.attributes.each_with_object({}) do |name, hash|
       hash[name] = @object.respond_to?(name) ? @object.send(name) : self.send(name)
-    end
-    hash.to_json
+    end.to_json
   end
 end
