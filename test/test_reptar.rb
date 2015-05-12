@@ -5,7 +5,7 @@ User = OpenStruct
 Post = OpenStruct
 Company = OpenStruct
 
-test "single attribute to json" do
+test "single attribute" do
   UserReptar = Class.new(Reptar) do
     attribute :name
   end
@@ -15,7 +15,17 @@ test "single attribute to json" do
   assert_equal UserReptar.new(user).to_json, result
 end
 
-test "multiple attributes to json" do
+test "nil attribute" do
+  UserReptar = Class.new(Reptar) do
+    attribute :name
+  end
+
+  user = User.new(name: nil)
+  result = {name: nil}.to_json
+  assert_equal UserReptar.new(user).to_json, result
+end
+
+test "multiple attributes" do
   UserReptar = Class.new(Reptar) do
     attributes :name, :email
   end
@@ -25,7 +35,7 @@ test "multiple attributes to json" do
   assert_equal UserReptar.new(user).to_json, result
 end
 
-test "method as attributes to json" do
+test "method as attribute" do
   PostReptar = Class.new(Reptar) do
     attribute :slug
 
@@ -37,6 +47,16 @@ test "method as attributes to json" do
   post = Post.new(name: "a-demo-post", id: 1)
   result = {slug: "a-demo-post-1"}.to_json
   assert_equal PostReptar.new(post).to_json, result
+end
+
+test "aplying root" do
+  UserReptar = Class.new(Reptar) do
+    attribute :name
+  end
+
+  user = User.new(name: "Julio")
+  result = {user: {name: "Julio"}}.to_json
+  assert_equal UserReptar.new(user).to_json(root: :user), result
 end
 
 test "initialize with an array" do

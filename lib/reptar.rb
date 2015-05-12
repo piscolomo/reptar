@@ -27,7 +27,10 @@ class Reptar
     @object.respond_to?(method_name) ? @object.send(method_name) : super
   end
 
-  def to_json; representable.to_json; end
+  def to_json(options = {})
+    root = options.fetch(:root, nil)
+    (root ? { root => representable } : representable).to_json
+  end
 
   def representable
     return nil unless @object
