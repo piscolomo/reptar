@@ -23,7 +23,7 @@ Usage
 Inherit `Reptar to build your representation, initialize your Reptar class with your object and get your json output with `to_json`. Declare the fields you want to return with `attribute`
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attribute :name
 end
 
@@ -35,7 +35,7 @@ UserRep.new(user).to_json
 You can define multiple attributes with `attributes`
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attributes :first_name, :last_name, :email
 end
 
@@ -53,7 +53,7 @@ UserRep.new(user).to_json
 If you want to rename an attribute to send a different name in the json output you can use the `key` option.
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attribute :name
   attribute :city, key: :location
 end
@@ -73,7 +73,7 @@ UserRep.new(user).to_json
 Send your custom methods as attributes to return their results to the json output.
 
 ```ruby
-PostRep < Reptar
+class PostRep < Reptar
   attributes :title, :slug
 
   def slug
@@ -112,7 +112,7 @@ UserRep.new(user).to_json(root: :user)
 You can initialize your representation class with an array of objects to return the output of each one.
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attributes :name
 end
 
@@ -135,7 +135,7 @@ UserRep.new(users).to_json
 `collection` method is available to be more explicit in your representation.
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attribute :name
   collection :languages
 end
@@ -155,7 +155,7 @@ UserRep.new(user).to_json
 You can associate your representation class with another using the `with` option, this is useful for return a nested output.
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attributes :name, :email
   attribute :company, with: "CompanyRep"
 end
@@ -182,7 +182,7 @@ UserRep.new(user).to_json
 You are free to also use `collection for define your asocciations.
 
 ```ruby
-UserRep < Reptar
+class UserRep < Reptar
   attributes :name, :email
   collection :posts, with: "PostRep"
 end
