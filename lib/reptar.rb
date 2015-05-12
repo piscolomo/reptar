@@ -25,8 +25,13 @@ class Reptar
 
   def to_json
     return nil unless @object
+    h = @object.is_a?(Array) ? @object.map{|e| self.class.new(e).hasheable } : hasheable
+    h.to_json
+  end
+
+  def hasheable
     self.class.nodes.each_with_object({}) do |name, hash|
       hash[name] = @object.respond_to?(name) ? @object.send(name) : self.send(name)
-    end.to_json
+    end
   end
 end

@@ -37,3 +37,17 @@ test "method as attributes to json" do
   result = {slug: "a-demo-post-1"}.to_json
   assert_equal PostReptar.new(post).to_json, result
 end
+
+test "initialize with an array" do
+  UserReptar = Class.new(Reptar) do
+    attribute :name
+  end
+
+  users = [User.new(name: "Julio"), User.new(name: "Piero")]
+  result = [
+    { name: "Julio" },
+    { name: "Piero" }
+  ].to_json
+  assert_equal UserReptar.new(users).to_json, result
+
+end
