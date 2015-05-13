@@ -20,7 +20,7 @@
 require "json"
 
 class Reptar
-  VERSION = "1.0.1"
+  VERSION = "1.0.2"
 
   class << self; attr_reader :nodes; end
 
@@ -51,7 +51,7 @@ class Reptar
 
   def representable
     return nil unless @object
-    @object.is_a?(Array) ? @object.map{|e| self.class.new(e).build_hash } : build_hash
+    @object.respond_to?(:to_a) ? @object.map{|e| self.class.new(e).build_hash } : build_hash
   end
 
   def build_hash
