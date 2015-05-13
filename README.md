@@ -179,7 +179,7 @@ UserRep.new(user).to_json
 }
 ```
 
-You are free to also use `collection for define your asocciations.
+You are free to also use `collection` for define your asocciations.
 
 ```ruby
 class UserRep < Reptar
