@@ -20,7 +20,7 @@
 require "json"
 
 class Reptar
-  VERSION = "1.0.0"
+  VERSION = "1.0.1"
 
   class << self; attr_reader :nodes; end
 
@@ -34,10 +34,6 @@ class Reptar
 
   def self.attributes(*attributes)
     attributes.each{ |e| @nodes[e] = nil }
-  end
-
-  def self.method_missing(method_name, *args)
-    method_name == :collection ? self.send(:attribute, *args) : super
   end
 
   def initialize(object)
@@ -67,4 +63,6 @@ class Reptar
       hash[name] = res
     end
   end
+
+  class << self; alias_method :collection, :attribute; end
 end
